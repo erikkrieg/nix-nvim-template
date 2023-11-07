@@ -13,13 +13,34 @@
         let
           pkgs = import nixpkgs { inherit system; };
           extraPackages = [ ];
+          binPath = pkgs.lib.makeBinPath extraPackages;
+          styler-nvim = with pkgs; vimUtils.buildVimPlugin
+            {
+              name = "styler.nvim";
+              pname = "styler.nvim";
+              src = fetchFromGitHub {
+                owner = "folke";
+                repo = "styler.nvim";
+                rev = "d5b7e43af4fdaa06e4175c84f4f57b633ae7e6ff";
+                sha256 = "sha256-BlePqxukucbrUPqk4NzqXsw+3RC/jU9WOpy40D0NbwQ=";
+              };
+            };
           plugins = with pkgs.vimPlugins; [
+            lazy-nvim
             alpha-nvim
             nvim-web-devicons
             telescope-nvim
             nvim-treesitter.withAllGrammars
+
+            # colorscheme
+            styler-nvim
+            catppuccin-nvim
+            tokyonight-nvim
           ];
-          binPath = pkgs.lib.makeBinPath extraPackages;
+          packpathDirs.myNeovimPackages = {
+            start = plugins;
+            opt = [ ];
+          };
           initFile = pkgs.writeTextFile {
             name = "init.lua";
             text = ''
@@ -32,16 +53,13 @@
             {
               customRC = "luafile ${initFile}";
             } // {
+            inherit packpathDirs;
             viAlias = true;
             vimAlias = true;
             withNodeJs = false;
             withPython3 = false;
             withRuby = false;
             wrapperArgs = pkgs.lib.escapeShellArgs [ "--suffix" "PATH" ":" "${binPath}" ];
-            packpathDirs.myNeovimPackages = {
-              start = plugins;
-              opt = [ ];
-            };
           };
         in
         with pkgs;
