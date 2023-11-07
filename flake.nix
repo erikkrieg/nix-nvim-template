@@ -14,6 +14,8 @@
           pkgs = import nixpkgs { inherit system; };
           extraPackages = [ ];
           plugins = with pkgs.vimPlugins; [
+            alpha-nvim
+            nvim-web-devicons
             telescope-nvim
             nvim-treesitter.withAllGrammars
           ];
@@ -22,8 +24,8 @@
             name = "init.lua";
             text = ''
               vim.loader.enable()
-              vim.opt.rtp:append("${../.}")
-              require "core"
+              vim.opt.rtp:append("${./nvim}")
+              require("core")
             '';
           };
           neovimConfig = pkgs.neovimUtils.makeNeovimConfig
@@ -55,6 +57,8 @@
           devShell = mkShell {
             buildInputs = [
               packages.nix-nvim
+              just
+              stylua
             ];
           };
         });
