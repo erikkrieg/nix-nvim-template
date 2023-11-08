@@ -1,4 +1,4 @@
-local plugins = {
+return {
   {
     name = "folke/styler.nvim",
     event = "VeryLazy",
@@ -29,8 +29,3 @@ local plugins = {
     end,
   },
 }
-
-local plug = require("core.plugins")
-for i, plugin in pairs(plugins) do
-  plug.load(plugin)
-end

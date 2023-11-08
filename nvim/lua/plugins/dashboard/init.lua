@@ -44,9 +44,9 @@ local config = function()
   require("alpha").setup(dash.opts)
 end
 
-require("core.plugins").load({
+return {
   name = "goolord/alpha-nvim",
   lazy = false,
   dependencies = { "nvim-tree/nvim-web-devicons" },
   config = config,
-})
+}

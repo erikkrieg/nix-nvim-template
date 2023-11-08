@@ -46,6 +46,7 @@
             text = ''
               vim.loader.enable()
               vim.opt.rtp:append("${./nvim}")
+              vim.g.plugin_config_dir = "${./nvim/lua/plugins}"
               require("core")
             '';
           };
